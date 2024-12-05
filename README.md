@@ -348,22 +348,72 @@ const sentMsg  = await sock.sendMessage(
     }
 )
 
-// send a buttons message!
-const buttons = [
-  {buttonId: 'id1', buttonText: {displayText: 'Button 1'}, type: 1},
-  {buttonId: 'id2', buttonText: {displayText: 'Button 2'}, type: 1},
-  {buttonId: 'id3', buttonText: {displayText: 'Button 3'}, type: 1}
-]
+// send new buttons message!
+        let msg = generateWAMessageFromContent(id, {
+            buttonsMessage: {
+                contentText: "Fizzxy Dev",
+                footerText: 'simple whatsapp bot',
+                buttons: [
+                    {
+                        buttonId: 'btn1',
+                        buttonText: { displayText: '🙂‍↔' },
+                        type: 1
+                    },
+                    {
+                        buttonId: 'btn2',
+                        buttonText: { displayText: '😜' },
+                        type: 1
+                    }
+                ],
+                headerType: "EMPTY", 
+            }
+        }, {});
+         await sock.relayMessage(id, msg.message, {
+            messageId: msg.key.id
+        });
+        
+//send new buttons location
+let msg = generateWAMessageFromContent(id, {
+        viewOnceMessage: {
+            message: {
+                messageContextInfo: {
+                    deviceListMetadata: {},
+                    deviceListMetadataVersion: 2
+                },
+                interactiveMessage: {
+                    body: {
+                        text: "YOUR TEXT", 
+                    },
+                    footer: {
+                        text: "© FizzxyDev"
+                    },
+                    header: {
+                        title: "© MIT LICENSE",
+                        subtitle: "© Fizzxy Dev",
+                        hasMediaAttachment: true,
+                        locationMessage: {
+                        degreesLatitude: 0
+                        degreesLongitude: 0,
+                        thumbnailJpg: fs.readFileSync("./path/to/image.jpg") 
+                        }
+                    },
+                    nativeFlowMessage: {
+                        buttons: [{
+                        name: "view_product",
+                        buttonParamsJson: "{}"
+                        }],
+                        messageParamsJson: "{}"
+                    }
+                }
+            }
+        }
+    }, {});
 
-const buttonMessage = {
-    text: "Hi it's button message",
-    footer: 'Hello World',
-    buttons: buttons,
-    headerType: 1
-}
-
-const sendMsg = await sock.sendMessage(id, buttonMessage)
-
+    await sock.relayMessage(msg.key.remoteJid, msg.message, {
+        messageId: msg.key.id
+    });
+    
+        
 //send a template message!
 const templateButtons = [
     {index: 1, urlButton: {displayText: '⭐ Star FizzxyBaileys on GitHub!', url: 'https://github.com/FizzxyDev/FizzxyBaileys'}},
