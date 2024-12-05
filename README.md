@@ -1,25 +1,13 @@
 
-# Baileys - Typescript/Javascript WhatsApp Web API
+# FizzxyBaileys - Typescript/Javascript WhatsApp Web API
  
- Baileys does not require Selenium or any other browser to be interface with WhatsApp Web, it does so directly using a **WebSocket**. Not running Selenium or Chromimum saves you like **half a gig** of ram :/ 
-
- Baileys supports interacting with the multi-device & web versions of WhatsApp.
-
- Thank you to [@pokearaujo](https://github.com/pokearaujo/multidevice) for writing his observations on the workings of WhatsApp Multi-Device. Also, thank you to [@Sigalor](https://github.com/sigalor/whatsapp-web-reveng) for writing his observations on the workings of WhatsApp Web and thanks to [@Rhymen](https://github.com/Rhymen/go-whatsapp/) for the __go__ implementation.
-
- Baileys is type-safe, extensible and simple to use. If you require more functionality than provided, it's super easy to write an extension. More on this [here](#WritingCustomFunctionality).
  
- If you're interested in building a WhatsApp bot, you may wanna check out [WhatsAppInfoBot](https://github.com/adiwajshing/WhatsappInfoBot) and an actual bot built with it, [Messcat](https://github.com/ashokatechmin/Messcat).
-
- **Read the docs [here](https://adiwajshing.github.io/Baileys)**
- **Join the Discord [here](https://discord.gg/WeJM5FP9GG)**
-
 ## Example
 
-Do check out & run [example.ts](https://github.com/adiwajshing/Baileys/blob/master/Example/example.ts) to see an example usage of the library.
+Do check out & run [example.ts](https://github.com/FizzxyDev/FizzxyBaileys/blob/master/Example/example.ts) to see an example usage of the library.
 The script covers most common use cases.
 To run the example script, download or clone the repo and then type the following in a terminal:
-1. ``` cd path/to/Baileys ```
+1. ``` cd path/to/FizzxyBaileys ```
 2. ``` yarn ```
 3. ``` yarn example ```
 
@@ -27,17 +15,17 @@ To run the example script, download or clone the repo and then type the followin
 
 Use the stable version:
 ```
-yarn add FizzxyDev/baileys
+yarn add github:FizzxyDev/FizzxyBaileys
 ```
 
 Use the edge version (no guarantee of stability, but latest fixes + features)
 ```
-yarn add github:adiwajshing/baileys
+yarn add github:FizzxyDev/FizzxyBaileys
 ```
 
 Then import your code using:
 ``` ts 
-import makeWASocket from 'FizzxyDev/baileys'
+import makeWASocket from 'FizzxyDev/FizzxyBaileys'
 ```
 
 ## Unit Tests
@@ -47,7 +35,7 @@ TODO
 ## Connecting
 
 ``` ts
-import makeWASocket, { DisconnectReason } from 'FizzxyDev/baileys'
+import makeWASocket, { DisconnectReason } from 'FizzxyDev/FizzxyBaileys'
 import { Boom } from '@hapi/boom'
 
 async function connectToWhatsApp () {
@@ -138,9 +126,9 @@ type SocketConfig = {
     msgRetryCounterMap?: MessageRetryMap
     /** width for link preview images */
     linkPreviewImageThumbnailWidth: number
-    /** Should Baileys ask the phone for full history, will be received async */
+    /** Should FizzxyBaileys ask the phone for full history, will be received async */
     syncFullHistory: boolean
-    /** Should baileys fire init queries automatically, default true */
+    /** Should FizzxyBaileys fire init queries automatically, default true */
     fireInitQueries: boolean
     /**
      * generate a high quality link preview,
@@ -160,7 +148,7 @@ type SocketConfig = {
 
 ### Emulating the Desktop app instead of the web
 
-1. Baileys, by default, emulates a chrome web session
+1. FizzxyBaileys, by default, emulates a chrome web session
 2. If you'd like to emulate a desktop connection (and receive more message history), add this to your Socket config:
     ``` ts
     const conn = makeWASocket({
@@ -177,12 +165,12 @@ You obviously don't want to keep scanning the QR code every time you want to con
 
 So, you can load the credentials to log back in:
 ``` ts
-import makeWASocket, { BufferJSON, useMultiFileAuthState } from 'FizzxyDev/baileys'
+import makeWASocket, { BufferJSON, useMultiFileAuthState } from 'FizzxyDev/FizzxyBaileys'
 import * as fs from 'fs'
 
 // utility function to help save the auth state in a single folder
 // this function serves as a good guide to help write auth & key states for SQL/no-SQL databases, which I would recommend in any production grade system
-const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
+const { state, saveCreds } = await useMultiFileAuthState('auth_info_FizzxyBaileys')
 // will use the given state to connect
 // so if valid credentials are available -- it'll connect without QR
 const conn = makeWASocket({ auth: state }) 
@@ -194,7 +182,7 @@ conn.ev.on ('creds.update', saveCreds)
 
 ## Listening to Connection Updates
 
-Baileys now fires the `connection.update` event to let you know something has updated in the connection. This data has the following structure:
+FizzxyBaileys now fires the `connection.update` event to let you know something has updated in the connection. This data has the following structure:
 ``` ts
 type ConnectionState = {
 	/** connection is now open, connecting or closed */
@@ -217,14 +205,14 @@ type ConnectionState = {
 
 ## Handling Events
 
-Baileys uses the EventEmitter syntax for events. 
+FizzxyBaileys uses the EventEmitter syntax for events. 
 They're all nicely typed up, so you shouldn't have any issues with an Intellisense editor like VS Code.
 
 The events are typed as mentioned here:
 
 ``` ts
 
-export type BaileysEventMap = {
+export type FizzxyBaileysEventMap = {
     /** connection state has been updated -- WS closed, opened, connecting etc. */
 	'connection.update': Partial<ConnectionState>
     /** credentials updated -- some metadata, keys or something */
@@ -285,20 +273,20 @@ sock.ev.on('messages.upsert', ({ messages }) => {
 
 ## Implementing a Data Store
 
-Baileys does not come with a defacto storage for chats, contacts, or messages. However, a simple in-memory implementation has been provided. The store listens for chat updates, new messages, message updates, etc., to always have an up-to-date version of the data.
+FizzxyBaileys does not come with a defacto storage for chats, contacts, or messages. However, a simple in-memory implementation has been provided. The store listens for chat updates, new messages, message updates, etc., to always have an up-to-date version of the data.
 
 It can be used as follows:
 
 ``` ts
-import makeWASocket, { makeInMemoryStore } from 'FizzxyDev/baileys'
+import makeWASocket, { makeInMemoryStore } from 'FizzxyDev/FizzxyBaileys'
 // the store maintains the data of the WA connection in memory
 // can be written out to a file & read from it
 const store = makeInMemoryStore({ })
 // can be read from a file
-store.readFromFile('./baileys_store.json')
+store.readFromFile('./FizzxyBaileys_store.json')
 // saves the state to a file every 10s
 setInterval(() => {
-    store.writeToFile('./baileys_store.json')
+    store.writeToFile('./FizzxyBaileys_store.json')
 }, 10_000)
 
 const sock = makeWASocket({ })
@@ -329,7 +317,7 @@ The store also provides some simple functions such as `loadMessages` that utiliz
 ### Non-Media Messages
 
 ``` ts
-import { MessageType, MessageOptions, Mimetype } from 'FizzxyDev/baileys'
+import { MessageType, MessageOptions, Mimetype } from 'FizzxyDev/FizzxyBaileys'
 
 const id = 'abcd@s.whatsapp.net' // the WhatsApp ID 
 // send a simple text!
@@ -378,7 +366,7 @@ const sendMsg = await sock.sendMessage(id, buttonMessage)
 
 //send a template message!
 const templateButtons = [
-    {index: 1, urlButton: {displayText: '⭐ Star Baileys on GitHub!', url: 'https://github.com/adiwajshing/Baileys'}},
+    {index: 1, urlButton: {displayText: '⭐ Star FizzxyBaileys on GitHub!', url: 'https://github.com/FizzxyDev/FizzxyBaileys'}},
     {index: 2, callButton: {displayText: 'Call me!', phoneNumber: '+1 (234) 5678-901'}},
     {index: 3, quickReplyButton: {displayText: 'This is a reply, just like normal buttons!', id: 'id-like-buttons-message'}},
 ]
@@ -432,22 +420,22 @@ const sendMsg = await sock.sendMessage(id, reactionMessage)
 ### Sending messages with link previews
 
 1. By default, WA MD does not have link generation when sent from the web
-2. Baileys has a function to generate the content for these link previews
+2. FizzxyBaileys has a function to generate the content for these link previews
 3. To enable this function's usage, add `link-preview-js` as a dependency to your project with `yarn add link-preview-js`
 4. Send a link:
 ``` ts
 // send a link
-const sentMsg  = await sock.sendMessage(id, { text: 'Hi, this was sent using https://github.com/adiwajshing/baileys' })
+const sentMsg  = await sock.sendMessage(id, { text: 'Hi, this was sent using https://github.com/FizzxyDev/FizzxyBaileys' })
 ```
 
 ### Media Messages
 
 Sending media (video, stickers, images) is easier & more efficient than ever. 
 - You can specify a buffer, a local url or even a remote url.
-- When specifying a media url, Baileys never loads the entire buffer into memory; it even encrypts the media as a readable stream.
+- When specifying a media url, FizzxyBaileys never loads the entire buffer into memory; it even encrypts the media as a readable stream.
 
 ``` ts
-import { MessageType, MessageOptions, Mimetype } from 'FizzxyDev/baileys'
+import { MessageType, MessageOptions, Mimetype } from 'FizzxyDev/FizzxyBaileys'
 // Sending gifs
 await sock.sendMessage(
     id, 
@@ -493,8 +481,8 @@ const sendMsg = await sock.sendMessage(id, buttonMessage)
 
 //send a template message with an image **attached**!
 const templateButtons = [
-  {index: 1, urlButton: {displayText: '⭐ Star Baileys on GitHub!', url: 'https://github.com/adiwajshing/Baileys'}},
-  {index: 2, callButton: {displayText: 'Call me!', phoneNumber: '+1 (234) 5678-901'}},
+  {index: 1, urlButton: {displayText: '⭐ Star FizzxyBaileys on GitHub!', url: 'https://github.com/FizzxyDev'}},
+  {index: 2, callButton: {displayText: 'Call me!', phoneNumber: '+628 xxxx'}},
   {index: 3, quickReplyButton: {displayText: 'This is a reply, just like normal buttons!', id: 'id-like-buttons-message'}},
 ]
 
@@ -529,7 +517,7 @@ const sendMsg = await sock.sendMessage(id, templateMessage)
                                     Do not enter this field if you want to automatically generate a thumb
                                 */
         mimetype: Mimetype.pdf, /* (for media messages) specify the type of media (optional for all media types except documents),
-                                    import {Mimetype} from 'FizzxyDev/baileys'
+                                    import {Mimetype} from 'FizzxyDev/FizzxyBaileys'
                                 */
         fileName: 'somefile.pdf', // (for media messages) file name for the media
         /* will send audio messages as voice notes, if set to true */
@@ -549,7 +537,7 @@ await sock.sendMessage('1234@s.whatsapp.net', { forward: msg }) // WA forward th
 ## Reading Messages
 
 A set of message keys must be explicitly marked read now. 
-In multi-device, you cannot mark an entire "chat" read as it were with Baileys Web.
+In multi-device, you cannot mark an entire "chat" read as it were with FizzxyBaileys Web.
 This means you have to keep track of unread messages.
 
 ``` ts
@@ -581,14 +569,14 @@ type WAPresence = 'unavailable' | 'available' | 'composing' | 'recording' | 'pau
 
 The presence expires after about 10 seconds.
 
-**Note:** In the multi-device version of WhatsApp -- if a desktop client is active, WA doesn't send push notifications to the device. If you would like to receive said notifications -- mark your Baileys client offline using `sock.sendPresenceUpdate('unavailable')`
+**Note:** In the multi-device version of WhatsApp -- if a desktop client is active, WA doesn't send push notifications to the device. If you would like to receive said notifications -- mark your FizzxyBaileys client offline using `sock.sendPresenceUpdate('unavailable')`
 
 ## Downloading Media Messages
 
 If you want to save the media you received
 ``` ts
 import { writeFile } from 'fs/promises'
-import { downloadMediaMessage } from 'FizzxyDev/baileys'
+import { downloadMediaMessage } from 'FizzxyDev/FizzxyBaileys'
 
 sock.ev.on('messages.upsert', async ({ messages }) => {
     const m = messages[0]
@@ -604,7 +592,7 @@ sock.ev.on('messages.upsert', async ({ messages }) => {
             { },
             { 
                 logger,
-                // pass this so that baileys can request a reupload of media
+                // pass this so that FizzxyBaileys can request a reupload of media
                 // that has been deleted
                 reuploadRequest: sock.updateMediaMessage
             }
@@ -849,7 +837,7 @@ Of course, replace ``` xyz ``` with an actual ID.
     ```
 
 ## Writing Custom Functionality
-Baileys is written with custom functionality in mind. Instead of forking the project & re-writing the internals, you can simply write your own extensions.
+FizzxyBaileys is written with custom functionality in mind. Instead of forking the project & re-writing the internals, you can simply write your own extensions.
 
 First, enable the logging of unhandled messages from WhatsApp by setting:
 ``` ts
