@@ -1,5 +1,5 @@
 
-# FizzxyBaileys - Typescript/Javascript WhatsApp Web API
+# Xlanzdev - Typescript/Javascript WhatsApp Web API
  
  
 ## Example
